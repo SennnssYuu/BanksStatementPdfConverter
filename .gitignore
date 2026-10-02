@@ -1,0 +1,11 @@
+# Bank statements and converted results - never commit these
+*.pdf
+*.xlsx
+debug.txt
+
+# Build output (attach the .exe to a GitHub Release instead)
+dist/
+build/
+
+# Python cache
+__pycache__/
