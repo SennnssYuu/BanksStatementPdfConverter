@@ -80,6 +80,18 @@ This creates `debug.txt` next to the PDF, showing where each word sits on the pa
 
 `unlock_copy.py` saves a password-free copy of a PDF for testing. Delete the copy afterwards.
 
+### Test with a sample statement
+
+`samples/make_sample_pdf.py` builds a fake KBank-style statement (data from a published sample, clearly labelled SAMPLE) so you can test without a real one:
+
+```bash
+pip install reportlab
+python samples/make_sample_pdf.py
+python statement_to_excel.py samples/sample-statement.pdf -o samples/sample-statement.xlsx
+```
+
+Expected: KBank format, 22 transactions, every check OK.
+
 ## Project structure
 
 | File | Purpose |
@@ -88,6 +100,7 @@ This creates `debug.txt` next to the PDF, showing where each word sits on the pa
 | `statement_to_excel.py` | Conversion entry point, command line, general-purpose reader |
 | `kbank.py` | KBank statement reader, checks and Excel layout |
 | `unlock_copy.py` | Save an unlocked copy of a PDF (for debugging) |
+| `samples/make_sample_pdf.py` | Build a fake sample statement PDF for testing |
 | `build_exe.bat` | Build the single-file `.exe` with PyInstaller |
 | `Statement to Excel.bat` | Start the app from source with a double-click |
 | `icon.ico` | App icon |
