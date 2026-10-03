@@ -14,6 +14,7 @@ import re
 import statistics
 from datetime import datetime
 
+from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
@@ -32,6 +33,8 @@ _THAI_MARKS = "ัิ-ฺ็-๎"
 
 
 def fix_thai(s):
+    # Control characters (some PDF fonts emit them) can't be stored in Excel cells
+    s = ILLEGAL_CHARACTERS_RE.sub("", s)
     s = s.translate(_PUA)
     # Sara am split into nikhahit + sara aa (ํ + า -> ำ), keeping any tone mark before it
     s = re.sub("ํ([่-๋]?)า", lambda m: m.group(1) + "ำ", s)

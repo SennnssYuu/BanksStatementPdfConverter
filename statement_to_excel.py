@@ -21,6 +21,7 @@ from pathlib import Path
 
 import pdfplumber
 from openpyxl import Workbook
+from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
@@ -122,11 +123,16 @@ class LineParser:
                 self.current = None
 
 
+def excel_safe(value):
+    """Drop control characters Excel can't store (some PDFs emit them); openpyxl raises otherwise."""
+    return ILLEGAL_CHARACTERS_RE.sub("", value) if isinstance(value, str) else value
+
+
 def write_sheet(ws, header, rows):
     ws.append(header)
     for row in rows:
-        ws.append([to_number(c) if isinstance(c, str) and AMOUNT_RE.fullmatch(c.strip()) else c
-                   for c in row])
+        ws.append([to_number(c) if isinstance(c, str) and AMOUNT_RE.fullmatch(c.strip())
+                   else excel_safe(c) for c in row])
     # Styling
     fill = PatternFill("solid", fgColor="1F4E78")
     for cell in ws[1]:
